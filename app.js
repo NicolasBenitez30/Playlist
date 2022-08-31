@@ -1,4 +1,4 @@
-const { request, response } = require('express')
+const { req, res } = require('express')
 const express = require('express')
 const app = express()
 app.use(express.json())
@@ -34,130 +34,130 @@ let playlists = [
 
 //endpoints
 
-app.post('/lists', (request, response) => {
-    let playlist = request.body
+app.post('/lists', (req, res) => {
+    let playlist = req.body
     if (playlist.nombre == null) {
-        response.status(400).send("nombre de lista incorrecto")
+        res.status(400).send("nombre de lista incorrecto")
     }
-    playlists.push(request.body)
-    response.status(201).send(playlist)
+    playlists.push(req.body)
+    res.status(201).send(playlist)
 })
 
-app.get('/lists', (request, response) => {
-    response.send(playlists)
+app.get('/lists', (req, res) => {
+    res.send(playlists)
 })
 
-app.get('/lists/:nombre', (request, response) => {
-    let nombre = request.params.nombre
+app.get('/lists/:nombre', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(400).send("nombre de lista incorrecto")
+        res.status(400).send("nombre de lista incorrecto")
         return
     }
-    response.send(playlist)
+    res.send(playlist)
 })
 
-app.put('/lists/:nombre', (request, response) => {
-    let nombre = request.params.nombre
+app.put('/lists/:nombre', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(400).send("nombre de lista incorrecto")
+        res.status(400).send("nombre de lista incorrecto")
         return
     }
-    playlist.descripcion = request.body.descripcion
-    response.send(playlist)
+    playlist.descripcion = req.body.descripcion
+    res.send(playlist)
 })
 
-app.delete('/lists/:nombre', (request, response) => {
-    let nombre = request.params.nombre
+app.delete('/lists/:nombre', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(400).send("nombre de lista incorrecto")
+        res.status(400).send("nombre de lista incorrecto")
         return
     }
     let eliminar = playlists.indexOf(playlist)
     playlists.splice(eliminar, 1)
-    response.send("Se elimino la Playlist")
+    res.send("Se elimino la Playlist")
 
 })
 
-app.get('/lists/:nombre/songs', (request, response) => {
-    let nombre = request.params.nombre
+app.get('/lists/:nombre/songs', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(400).send("nombre de lista incorrecto")
+        res.status(400).send("nombre de lista incorrecto")
         return
     }
-    response.send(playlist.canciones)
+    res.send(playlist.canciones)
 })
 
-app.get('/lists/:nombre/songs/:titulo', (request, response) => {
-    let nombre = request.params.nombre
+app.get('/lists/:nombre/songs/:titulo', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(400).send("nombre de lista incorrecto")
+        res.status(400).send("nombre de lista incorrecto")
         return
     }
-    let titulo = request.params.titulo
+    let titulo = req.params.titulo
     let cancion = playlist.canciones.find(x => x.titulo == titulo)
     if (cancion == null) {
-        response.status(400).send("nombre de cancion incorrecto")
+        res.status(400).send("nombre de cancion incorrecto")
         return
     }
-    response.send(cancion)
+    res.send(cancion)
 })
 
-app.post('/lists/:nombre/songs', (request, response) => {
-    let nombre = request.params.nombre
+app.post('/lists/:nombre/songs', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(404).send("nombre de lista incorrecto")
+        res.status(404).send("nombre de lista incorrecto")
         return
     }
-    let cancion = request.body
+    let cancion = req.body
     if (cancion.titulo == null) {
-        response.status(400).send("nombre de cancion incorrecto")
+        res.status(400).send("nombre de cancion incorrecto")
         return
     }
-    playlist.canciones.push(request.body)
-    response.status(201).send(playlist.canciones)
+    playlist.canciones.push(req.body)
+    res.status(201).send(playlist.canciones)
 })
 
-app.put('/lists/:nombre/songs/:titulo', (request, response) => {
-    let nombre = request.params.nombre
+app.put('/lists/:nombre/songs/:titulo', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(404).send("nombre de lista incorrecto")
+        res.status(404).send("nombre de lista incorrecto")
         return
     }
-    let titulo = request.params.titulo
+    let titulo = req.params.titulo
     let cancion = playlist.canciones.find(x => x.titulo == titulo)
     if (cancion.titulo == null) {
-        response.status(400).send("nombre de cancion incorrecto")
+        res.status(400).send("nombre de cancion incorrecto")
         return
     }
-    cancion.artista = request.body.artista
-    cancion.album = request.body.album
-    cancion.anio = request.body.anio
-    response.send(cancion)
+    cancion.artista = req.body.artista
+    cancion.album = req.body.album
+    cancion.anio = req.body.anio
+    res.send(cancion)
 })
 
-app.delete('/lists/:nombre/songs/:titulo', (request, response) => {
-    let nombre = request.params.nombre
+app.delete('/lists/:nombre/songs/:titulo', (req, res) => {
+    let nombre = req.params.nombre
     let playlist = playlists.find(x => x.nombre == nombre)
     if (playlist == null) {
-        response.status(404).send("nombre de lista incorrecto")
+        res.status(404).send("nombre de lista incorrecto")
         return
     }
-    let titulo = request.params.titulo
+    let titulo = req.params.titulo
     let cancion = playlist.canciones.find(x => x.titulo == titulo)
     if (cancion.titulo == null) {
-        response.status(400).send("nombre de cancion incorrecto")
+        res.status(400).send("nombre de cancion incorrecto")
         return
     }
     let eliminar = playlist.canciones.indexOf(cancion)
     playlist.canciones.splice(eliminar, 1)
-    response.send("Se elimino la Cancion")
+    res.send("Se elimino la Cancion")
 })
 
 app.listen(port, () => {
