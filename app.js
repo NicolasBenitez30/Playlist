@@ -123,9 +123,42 @@ app.post('/lists/:nombre/songs', (request, response) => {
     response.status(201).send(playlist.canciones)
 })
 
-// app.put('', (request, response) => {
+app.put('/lists/:nombre/songs/:titulo', (request, response) => {
+    let nombre = request.params.nombre
+    let playlist = playlists.find(x => x.nombre == nombre)
+    if (playlist == null) {
+        response.status(404).send("nombre de lista incorrecto")
+        return
+    }
+    let titulo = request.params.titulo
+    let cancion = playlist.canciones.find(x => x.titulo == titulo)
+    if (cancion.titulo == null) {
+        response.status(400).send("nombre de cancion incorrecto")
+        return
+    }
+    cancion.artista = request.body.artista
+    cancion.album = request.body.album
+    cancion.anio = request.body.anio
+    response.send(cancion)
+})
 
-// })
+app.delete('/lists/:nombre/songs/:titulo', (request, response) => {
+    let nombre = request.params.nombre
+    let playlist = playlists.find(x => x.nombre == nombre)
+    if (playlist == null) {
+        response.status(404).send("nombre de lista incorrecto")
+        return
+    }
+    let titulo = request.params.titulo
+    let cancion = playlist.canciones.find(x => x.titulo == titulo)
+    if (cancion.titulo == null) {
+        response.status(400).send("nombre de cancion incorrecto")
+        return
+    }
+    let eliminar = playlist.canciones.indexOf(cancion)
+    playlist.canciones.splice(eliminar, 1)
+    response.send("Se elimino la Cancion")
+})
 
 app.listen(port, () => {
     console.log(`Escuchando peticiones en ${port}`)
