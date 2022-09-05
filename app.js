@@ -1,165 +1,20 @@
 import express, { json } from 'express'
+
 import morgan from 'morgan'
-import 'dotenv/config'  
-app.use(json())
-app.use(morgan('dev'))
+
+import 'dotenv/config'
+
+import playlistRoutes from './routes/playlist.routes'
+
+const app = express()  
 
 const port = process.env.PORT
 
-let playlists = [
-    {
-        nombre: "tranki",
-        descripcion: "chill's track's",
-        canciones: [
-            {
-                titulo: "Perla",
-                artista: "C.R.O",
-                album: "Perla",
-                anio: "2018"
-            },
-            {
-                titulo: "Me voy a olvidar",
-                artista: "T&K",
-                album: "El Libro Negro",
-                anio: "2018"
-            },
-            {
-                titulo: "Ly$",
-                artista: "C.R.O & Franky Style",
-                album: "MBD Crew",
-                anio: "2018"
-            }
-        ]
-    }
-]
+app.use(json())
 
-//endpoints
+app.use(morgan('dev'))
 
-app.post('/lists', (req, res) => {
-    let playlist = req.body
-    if (playlist.nombre == null) {
-        res.status(400).send("nombre de lista incorrecto")
-    }
-    playlists.push(req.body)
-    res.status(201).send(playlist)
-})
-
-app.get('/lists', (req, res) => {
-    res.send(playlists)
-})
-
-app.get('/lists/:nombre', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(400).send("nombre de lista incorrecto")
-        return
-    }
-    res.send(playlist)
-})
-
-app.put('/lists/:nombre', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(400).send("nombre de lista incorrecto")
-        return
-    }
-    playlist.descripcion = req.body.descripcion
-    res.send(playlist)
-})
-
-app.delete('/lists/:nombre', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(400).send("nombre de lista incorrecto")
-        return
-    }
-    let eliminar = playlists.indexOf(playlist)
-    playlists.splice(eliminar, 1)
-    res.send("Se elimino la Playlist")
-
-})
-
-app.get('/lists/:nombre/songs', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(400).send("nombre de lista incorrecto")
-        return
-    }
-    res.send(playlist.canciones)
-})
-
-app.get('/lists/:nombre/songs/:titulo', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(400).send("nombre de lista incorrecto")
-        return
-    }
-    let titulo = req.params.titulo
-    let cancion = playlist.canciones.find(x => x.titulo == titulo)
-    if (cancion == null) {
-        res.status(400).send("nombre de cancion incorrecto")
-        return
-    }
-    res.send(cancion)
-})
-
-app.post('/lists/:nombre/songs', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(404).send("nombre de lista incorrecto")
-        return
-    }
-    let cancion = req.body
-    if (cancion.titulo == null) {
-        res.status(400).send("nombre de cancion incorrecto")
-        return
-    }
-    playlist.canciones.push(req.body)
-    res.status(201).send(playlist.canciones)
-})
-
-app.put('/lists/:nombre/songs/:titulo', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(404).send("nombre de lista incorrecto")
-        return
-    }
-    let titulo = req.params.titulo
-    let cancion = playlist.canciones.find(x => x.titulo == titulo)
-    if (cancion.titulo == null) {
-        res.status(400).send("nombre de cancion incorrecto")
-        return
-    }
-    cancion.artista = req.body.artista
-    cancion.album = req.body.album
-    cancion.anio = req.body.anio
-    res.send(cancion)
-})
-
-app.delete('/lists/:nombre/songs/:titulo', (req, res) => {
-    let nombre = req.params.nombre
-    let playlist = playlists.find(x => x.nombre == nombre)
-    if (playlist == null) {
-        res.status(404).send("nombre de lista incorrecto")
-        return
-    }
-    let titulo = req.params.titulo
-    let cancion = playlist.canciones.find(x => x.titulo == titulo)
-    if (cancion.titulo == null) {
-        res.status(400).send("nombre de cancion incorrecto")
-        return
-    }
-    let eliminar = playlist.canciones.indexOf(cancion)
-    playlist.canciones.splice(eliminar, 1)
-    res.send("Se elimino la Cancion")
-})
+app.use(playlistRoutes)
 
 app.listen(port, () => {
     console.log(`Escuchando peticiones en ${port}`)
