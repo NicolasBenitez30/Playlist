@@ -6,6 +6,8 @@ import 'dotenv/config'
 
 import playlistRoutes from './routes/playlist.routes'
 
+import database from './database'
+
 const app = express()  
 
 const port = process.env.PORT

@@ -2,32 +2,7 @@ import express from 'express'
 
 const router = express.Router()
 
-let playlists = [
-    {
-        nombre: "tranki",
-        descripcion: "chill's track's",
-        canciones: [
-            {
-                titulo: "Perla",
-                artista: "C.R.O",
-                album: "Perla",
-                anio: "2018"
-            },
-            {
-                titulo: "Me voy a olvidar",
-                artista: "T&K",
-                album: "El Libro Negro",
-                anio: "2018"
-            },
-            {
-                titulo: "Ly$",
-                artista: "C.R.O & Franky Style",
-                album: "MBD Crew",
-                anio: "2018"
-            }
-        ]
-    }
-]
+import Playlist from '../models/playlist.model'
 
 //endpoints
 
