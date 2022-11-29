@@ -87,9 +87,6 @@ router.post('/lists/:nombre/songs', async (req, res) => {
         lista.canciones.push(cancion)
         await Playlist.findOneAndUpdate({nombre: nombrePlaylist}, lista)
         res.status(201).send(lista)
-        // const playlist = await Playlist.findOne({ nombre: nombrePlaylist})
-        // await playlist.canciones.create(cancion)
-        // res.status(201).send(cancion)
     } catch (err) {
         res.status(500).send(err)
     }
@@ -109,15 +106,6 @@ router.put('/lists/:nombre/songs/:titulo', async (req, res) => {
         await Playlist.findOneAndUpdate( {nombre: nombrePlaylist}, lista )
         const listaResponse = await Playlist.findOne( {nombre: nombrePlaylist} )
         res.status(204).send(listaResponse)
-        // let nombrePlaylist = req.params.nombre
-        // const playlist = await Playlist.findOne({ nombre: nombrePlaylist})
-        // let tituloCancion = req.body
-        // await Playlist.canciones.cancion.findOneAndUpdate({ titulo: tituloCancion}, cancion)
-        // await cancion.artista.findOneAndUpdate({ titulo: tituloCancion})
-        // await cancion.album.findOneAndUpdate({ titulo: tituloCancion})
-        // await cancion.anio.findOneAndUpdate({ titulo: tituloCancion})
-        // const cancionResponse = await Playlist.findOne({ titulo: tituloCancion})
-        // res.send(cancionResponse)
     } catch (err) {
         res.status(500).send(err)
     }
@@ -134,11 +122,6 @@ router.delete('/lists/:nombre/songs/:titulo', async (req, res) => {
         await Playlist.findOneAndUpdate( {nombre: nombrePlaylist}, lista )
         const listaResponse = await Playlist.findOne( {nombre: nombrePlaylist} )
         res.status(204).send(listaResponse)
-        // let nombrePlaylist = req.params.nombre
-        // let playlist = await Playlist.findOne({ nombre: nombrePlaylist})
-        // let tituloCancion = req.params.titulo
-        // await Playlist.canciones.cancion.findOneAndRemove({ titulo: tituloCancion})
-        // res.status(204).send()
     } catch (err) {
         res.status(500).send(err)
     }
